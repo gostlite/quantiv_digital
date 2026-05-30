@@ -29,6 +29,16 @@ jobs:
       - name: Build Application
         run: npm run build
 
+      - name: Prepare Upload Directory
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            rm -rf ~/quantiv_digital_release
+            mkdir -p ~/quantiv_digital_release
+
       - name: Upload Build Files
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -36,15 +46,19 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/*"
-          target: "/var/www/quantiv_digital"
+          target: "~/quantiv_digital_release"
+          strip_components: 1
 
-      - name: Reload Nginx
+      - name: Publish Build and Reload Nginx
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            sudo mkdir -p /var/www/quantiv_digital
+            sudo rm -rf /var/www/quantiv_digital/*
+            sudo cp -r ~/quantiv_digital_release/. /var/www/quantiv_digital/
             sudo nginx -t
             sudo systemctl reload nginx
 
