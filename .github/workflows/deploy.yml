@@ -1,53 +1,51 @@
 name: Deploy Quantiv Digital
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
 
 concurrency:
-group: quantiv-digital-production
-cancel-in-progress: true
+  group: quantiv-digital-production
+  cancel-in-progress: true
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  - name: Setup Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: 22
-      cache: npm
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
 
-  - name: Install Dependencies
-    run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-  - name: Build Application
-    run: npm run build
+      - name: Build Application
+        run: npm run build
 
-  - name: Upload Build Files
-    uses: appleboy/scp-action@v0.1.7
-    with:
-      host: ${{ secrets.SERVER_HOST }}
-      username: ${{ secrets.SERVER_USER }}
-      key: ${{ secrets.SERVER_SSH_KEY }}
-      source: "dist/*"
-      target: "/var/www/quantiv_digital"
+      - name: Upload Build Files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "dist/*"
+          target: "/var/www/quantiv_digital"
 
-  - name: Reload Nginx
-    uses: appleboy/ssh-action@v1.2.0
-    with:
-      host: ${{ secrets.SERVER_HOST }}
-      username: ${{ secrets.SERVER_USER }}
-      key: ${{ secrets.SERVER_SSH_KEY }}
-      script: |
-        sudo nginx -t
-        sudo systemctl reload nginx
+      - name: Reload Nginx
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            sudo nginx -t
+            sudo systemctl reload nginx
 
-        echo "✅ Quantiv Digital deployed successfully"
-```
+            echo "✅ Quantiv Digital deployed successfully"
