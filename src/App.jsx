@@ -41,7 +41,7 @@ function App() {
           </span>
         </a>
         <nav>
-          <a href="https://movva-landing.vercel.app/" target="_blank" rel="noreferrer">
+          <a href="https://movva.quantivdigital.com" target="_blank" rel="noreferrer">
             Movva
           </a>
           <a href="#goals">Goals</a>
@@ -159,7 +159,7 @@ function App() {
         </div>
         <a
           className="product-showcase"
-          href="https://movva-landing.vercel.app/"
+          href="https://movva.quantivdigital.com/"
           target="_blank"
           rel="noreferrer"
           aria-label="Open the Movva product page"
