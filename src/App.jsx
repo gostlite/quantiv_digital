@@ -41,9 +41,14 @@ function App() {
           </span>
         </a>
         <nav>
-          <a href="https://movva.quantivdigital.com" target="_blank" rel="noreferrer">
-            Movva
-          </a>
+          <details className="product-menu">
+            <summary>Products</summary>
+            <div className="product-menu-panel">
+              <a href="https://movva.quantivdigital.com" target="_blank" rel="noreferrer">
+                Movva
+              </a>
+            </div>
+          </details>
           <a href="#goals">Goals</a>
           <a href="#partner">Partner</a>
         </nav>
