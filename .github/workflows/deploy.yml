@@ -36,7 +36,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            mkdir -p /var/www/quantiv_digital
+            sudo mkdir -p /var/www/quantiv_digital
+            sudo chown -R $USER:$USER /var/www/quantiv_digital
             rm -rf /var/www/quantiv_digital/*
 
       - name: Upload Build Files
